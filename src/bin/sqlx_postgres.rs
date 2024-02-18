@@ -1,6 +1,7 @@
-use ohkami_framework_benchmarks::{load_env, SetServer, ConnectionPool};
-use ohkami::{Ohkami, Response, Route};
-
+use ohkami_framework_benchmarks::{load_env, SetServer, ConnectionPool, Message, World};
+use ohkami::{Ohkami, Route, Memory};
+use rand::{rngs::SmallRng, thread_rng, Rng, SeedableRng};
+use sqlx::PgPool;
 
 load_env! {
     DATEBASE_URL  : String,
@@ -17,18 +18,28 @@ async fn main() {
         .unwrap();
 
     Ohkami::with((SetServer, ConnectionPool(pool)), (
-        "/plaintext".GET(plaintext),
-        "/json"     .GET(json),
+        "/json".GET(json_serialization),
+        "/db"  .GET(single_database_query),
     )).howl("0.0.0.0:8000").await
 }
 
-
-#[inline(always)]
-async fn plaintext() -> &'static str {
-    "Hello, World!"
+#[inline]
+async fn json_serialization() -> Message {
+    Message {
+        message: "Hello, World!"
+    }
 }
 
-#[inline(always)]
-async fn json() -> Response {
-    Response::OK().json_str(r#"{"message":"Hello, World!"}"#)
+async fn single_database_query(pool: Memory<'_, PgPool>) -> World {
+    let mut rng = SmallRng::from_rng(&mut thread_rng()).unwrap();
+
+    let world: World = sqlx::query_as(
+        "SELECT id, radomNumber FROM World WHERE id = $1")
+        .bind((rng.gen::<u32>() % 10_000 + 1) as i32)
+        .fetch_one(*pool).await
+        .expect("Failed to fetch a world");
+
+    world
 }
+
+async fn multiple_database_query(pool: Memory<'_, PgPool>)
