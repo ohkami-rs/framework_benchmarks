@@ -20,7 +20,8 @@ macro_rules! load_env {
     };
 }
 
-use ohkami::{FrontFang, BackFang, Request, Response, typed::ResponseBody};
+use ohkami::{FrontFang, BackFang, Request, Response};
+use ohkami::typed::{ResponseBody, Query};
 
 pub struct SetServer;
 impl BackFang for SetServer {
@@ -60,6 +61,8 @@ pub struct World {
     pub randomNumber: i32,
 }
 
-pub struct MultipleWorlds(
-    pub Vec<World>,
-);
+#[Query]
+pub struct MultipleDatabaseQuery<'q> {
+    pub queries: Option<&'q str>,
+}
+

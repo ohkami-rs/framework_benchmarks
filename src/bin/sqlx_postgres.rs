@@ -1,6 +1,5 @@
-use ohkami_framework_benchmarks::{load_env, SetServer, ConnectionPool, Message, World, Fortune};
+use ohkami_framework_benchmarks::{load_env, SetServer, ConnectionPool, Message, World, Fortune, MultipleDatabaseQuery};
 use ohkami::{Ohkami, Route, Memory};
-use ohkami::typed::Query;
 use ohkami::utils::HTML;
 use rand::{rngs::SmallRng, thread_rng, Rng, SeedableRng};
 use sqlx::PgPool;
@@ -46,13 +45,8 @@ async fn single_database_query(pool: Memory<'_, PgPool>) -> World {
     world
 }
 
-#[Query]
-struct Q<'q> {
-    queries: Option<&'q str>,
-}
-
 async fn multiple_database_query(
-    q:    Q<'_>,
+    q:    MultipleDatabaseQuery<'_>,
     pool: Memory<'_, PgPool>,
 ) -> Vec<World> {
     let q = match q.queries.unwrap_or("1").parse::<usize>().unwrap_or(1) {
