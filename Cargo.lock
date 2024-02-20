@@ -738,9 +738,9 @@ dependencies = [
 
 [[package]]
 name = "ohkami"
-version = "0.14.0"
+version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "31599b97fce0a7b6cc7000b949a2252940fa74eb971d7c77e38cc48ef269a858"
+checksum = "0e19a311d70d741f4a08f54374df6501bc2ebde819b5a69b95763ea2335f5f19"
 dependencies = [
  "byte_reader",
  "hmac",
@@ -770,9 +770,9 @@ checksum = "8bf187aa0f73c2b91d9ac5c7eb1437c8d1a015d765d4fc3db8113c90a82ae2a0"
 
 [[package]]
 name = "ohkami_macros"
-version = "0.5.2"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af1186cf1bc0126c748410f2263a8f128fd7b18d336e9cd701e0487e0e8e3f39"
+checksum = "02c09a65693c4398af64b085040fe937f7d42d9b164306b5271fc169fa276db7"
 dependencies = [
  "proc-macro2",
  "quote",

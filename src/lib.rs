@@ -24,7 +24,8 @@ use ohkami::{FrontFang, BackFang, Request, Response, typed::ResponseBody};
 
 pub struct SetServer;
 impl BackFang for SetServer {
-    #[inline] async fn bite(&self, res: &mut Response, _req: &Request) -> Result<(), Response> {
+    type Error = std::convert::Infallible;
+    #[inline] async fn bite(&self, res: &mut Response, _req: &Request) -> Result<(), Self::Error> {
         res.headers.set().Server("ohkami");
         Ok(())
     }
@@ -34,7 +35,8 @@ pub struct ConnectionPool<DB: sqlx::Database>(
     pub sqlx::Pool<DB>,
 );
 impl<DB: sqlx::Database> FrontFang for ConnectionPool<DB> {
-    #[inline] async fn bite(&self, req: &mut Request) -> Result<(), Response> {
+    type Error = std::convert::Infallible;
+    #[inline] async fn bite(&self, req: &mut Request) -> Result<(), Self::Error> {
         req.memorize(self.0.clone());
         Ok(())
     }
@@ -46,9 +48,9 @@ pub struct Message {
 }
 
 #[derive(sqlx::FromRow)]
-pub struct Fortune<'f> {
+pub struct Fortune {
     pub id:      i32,
-    pub message: &'f str,
+    pub message: String,
 }
 
 #[derive(sqlx::FromRow)]
