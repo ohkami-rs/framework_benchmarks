@@ -86,7 +86,7 @@ async fn fortunes(pool: Memory<'_, PgPool>) -> HTML {
         message: String::from("Additional fortune added at request time."),
     });
 
-    fortunes.sort_unstable_by(|a, b| <str as Ord>::cmp(&a.message, &b.message));
+    fortunes.sort_unstable_by(|a, b| str::cmp(&a.message, &b.message));
 
     HTML("")
 }
