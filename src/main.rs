@@ -1,8 +1,8 @@
-mod postgres;
-pub use postgres::Postgres;
-
 mod models;
 pub use models::{Fortune, Message, World, WorldsQuery};
+
+mod postgres;
+pub use postgres::Postgres;
 
 mod templates;
 pub use templates::FortunesTemplate;
@@ -33,25 +33,25 @@ async fn main() {
     )).howl("0.0.0.0:8000").await
 }
 
-#[inline]
+#[inline(always)]
 async fn json_serialization() -> Message {
     Message {
         message: "Hello, World!"
     }
 }
 
-#[inline]
+#[inline(always)]
 async fn single_database_query(p: Memory<'_, Postgres>) -> World {
     p.select_random_world().await
 }
 
-#[inline]
+#[inline(always)]
 async fn multiple_database_query(q: WorldsQuery<'_>, p: Memory<'_, Postgres>) -> Vec<World> {
     let n = q.parse();
     p.select_n_random_worlds(n).await
 }
 
-#[inline]
+#[inline(always)]
 async fn fortunes(p: Memory<'_, Postgres>) -> FortunesTemplate {
     let mut fortunes = p.select_all_fortunes().await;
     fortunes.push(Fortune {
@@ -63,13 +63,13 @@ async fn fortunes(p: Memory<'_, Postgres>) -> FortunesTemplate {
     FortunesTemplate { fortunes }
 }
 
-#[inline]
+#[inline(always)]
 async fn database_updates(q: WorldsQuery<'_>, p: Memory<'_, Postgres>) -> Vec<World> {
     let worlds = p.select_n_random_worlds(q.parse()).await;
     p.update_random_ids_of_worlds(worlds).await
 }
 
-#[inline]
+#[inline(always)]
 async fn plaintext() -> &'static str {
     "Hello, World"
 }
