@@ -16,26 +16,26 @@ PostgreSQL with [sqlx](https://github.com/launchbadge/sqlx)
 
 ## Test URLs
 
-### Test 1: JSON Encoding
+### 1. JSON Serialization
 
     http://localhost:8000/json
 
-### Test 2: Single Row Query
+### 2. Single Database Query
 
     http://localhost:8000/db
 
-### Test 3: Multi Row Query
+### 3. Multiple Database Queries
 
     http://localhost:8000/queries?q={count}
 
-### Test 4: Fortunes (Template rendering)
+### 4. Fortunes
 
     http://localhost:8000/fortunes
 
-### Test 5: Update Query
+### 5: Database Updates
 
     http://localhost:8000/updates?q={count}
 
-### Test 6: Plaintext
+### 6. Plaintext
 
     http://localhost:8000/plaintext
