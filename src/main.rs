@@ -15,6 +15,7 @@ async fn main() {
     struct SetServer;
     impl ohkami::BackFang for SetServer {
         type Error = std::convert::Infallible;
+        #[inline(always)]
         async fn bite(&self, res: &mut ohkami::Response, _req: &ohkami::Request) -> Result<(), Self::Error> {
             res.headers.set().Server("ohkami");
             Ok(())
@@ -48,18 +49,23 @@ async fn multiple_database_query(q: WorldsQuery<'_>, p: Memory<'_, Postgres>) ->
 
 async fn fortunes(p: Memory<'_, Postgres>) -> FortunesTemplate {
     let mut fortunes = p.select_all_fortunes().await;
+
     fortunes.push(Fortune {
         id:      0,
         message: String::from("Additional fortune added at request time."),
     });
+
     fortunes.sort_unstable_by(|a, b| str::cmp(&a.message, &b.message));
 
     FortunesTemplate { fortunes }
 }
 
 async fn database_updates(q: WorldsQuery<'_>, p: Memory<'_, Postgres>) -> Vec<World> {
-    let mut worlds = p.select_n_random_worlds(q.parse()).await;
+    let n = q.parse();
+    let mut worlds = p.select_n_random_worlds(n).await;
+
     p.update_random_ids_of_worlds(&mut worlds).await;
+
     worlds
 }
 

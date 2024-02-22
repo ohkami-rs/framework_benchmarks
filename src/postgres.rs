@@ -12,7 +12,6 @@ impl Postgres {
 
         impl ohkami::FrontFang for UsePostgres {
             type Error = std::convert::Infallible;
-
             #[inline(always)]
             async fn bite(&self, req: &mut ohkami::Request) -> Result<(), Self::Error> {
                 req.memorize(self.0.clone());
@@ -33,9 +32,7 @@ impl Postgres {
                         .unwrap();
                 )*
             };
-        }
-
-        load_env! {
+        } load_env! {
             MAX_CONNECTIONS as u32
             MIN_CONNECTIONS as u32
             DATABASE_URL    as String
@@ -90,12 +87,11 @@ impl Postgres {
     
         let updates = FuturesUnordered::new();
         for w in worlds {
-            let new_randomnumber = (rng.gen::<u32>() % 10_000 + 1) as i32;
-            w.randomnumber = new_randomnumber;
+            w.randomnumber = (rng.gen::<u32>() % 10_000 + 1) as i32;
             updates.push(
                 sqlx::query(
                     "UPDATE World SET randomnumber = $1 WHERE id = $2")
-                    .bind(new_randomnumber)
+                    .bind(w.randomnumber)
                     .bind(w.id)
                     .execute(&self.0)
             )
