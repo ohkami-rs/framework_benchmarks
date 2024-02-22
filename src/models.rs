@@ -23,12 +23,12 @@ pub struct World {
 
 #[Query]
 pub struct WorldsQuery<'q> {
-    queries: Option<&'q str>,
+    q: Option<&'q str>,
 }
 impl WorldsQuery<'_> {
     #[inline(always)]
     pub fn parse(self) -> usize {
-        match self.queries.unwrap_or("1").parse::<usize>().unwrap_or(1) {
+        match self.q.unwrap_or("1").parse::<usize>().unwrap_or(1) {
             n @ 1..=500 => n,
             0           => 1,
             501..       => 500,
