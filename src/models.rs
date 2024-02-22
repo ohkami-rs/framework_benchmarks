@@ -1,5 +1,3 @@
-#![allow(non_snake_case)]
-
 use ohkami::typed::{ResponseBody, Query};
 
 
@@ -18,7 +16,8 @@ pub struct Fortune {
 #[ResponseBody(JSONS)]
 pub struct World {
     pub id:           i32,
-    pub randomNumber: i32,
+    #[serde(rename="randomNumber")]
+    pub randomnumber: i32,
 }
 
 #[Query]
