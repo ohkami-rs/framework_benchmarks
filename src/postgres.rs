@@ -82,25 +82,25 @@ impl Postgres {
             )
         }
     
-        selects.try_collect().await
-            .expect("Failed to fetch worlds")
+        selects.try_collect().await.expect("Failed to fetch worlds")
     }
     
-    pub async fn update_random_ids_of_worlds(&self, worlds: Vec<World>) -> Vec<World> {
+    pub async fn update_random_ids_of_worlds(&self, worlds: &mut Vec<World>) {
         let mut rng = SmallRng::from_rng(&mut thread_rng()).unwrap();
     
         let updates = FuturesUnordered::new();
         for w in worlds {
+            let new_randomnumber = (rng.gen::<u32>() % 10_000 + 1) as i32;
+            w.randomnumber = new_randomnumber;
             updates.push(
-                sqlx::query_as(
+                sqlx::query(
                     "UPDATE World SET randomnumber = $1 WHERE id = $2")
-                    .bind((rng.gen::<u32>() % 10_000 + 1) as i32)
+                    .bind(new_randomnumber)
                     .bind(w.id)
-                    .fetch_one(&self.0)
+                    .execute(&self.0)
             )
         }
     
-        updates.try_collect().await
-            .expect("Failed to fetch worlds")
-    }    
+        let _: sqlx::postgres::PgQueryResult = updates.try_collect().await.expect("Failed to fetch worlds");
+    }
 }

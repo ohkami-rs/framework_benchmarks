@@ -58,10 +58,11 @@ async fn fortunes(p: Memory<'_, Postgres>) -> FortunesTemplate {
 }
 
 async fn database_updates(q: WorldsQuery<'_>, p: Memory<'_, Postgres>) -> Vec<World> {
-    let worlds = p.select_n_random_worlds(q.parse()).await;
-    p.update_random_ids_of_worlds(worlds).await
+    let mut worlds = p.select_n_random_worlds(q.parse()).await;
+    p.update_random_ids_of_worlds(&mut worlds).await;
+    worlds
 }
 
 async fn plaintext() -> &'static str {
-    "Hello, World"
+    "Hello, World!"
 }
