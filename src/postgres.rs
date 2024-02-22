@@ -56,7 +56,7 @@ impl Postgres {
         let mut rng = SmallRng::from_rng(&mut thread_rng()).unwrap();
     
         sqlx::query_as(
-            "SELECT id, radomNumber FROM World WHERE id = $1")
+            "SELECT id, randomNumber FROM World WHERE id = $1")
             .bind((rng.gen::<u32>() % 10_000 + 1) as i32)
             .fetch_one(&self.0).await
             .expect("Failed to fetch a world")
@@ -76,7 +76,7 @@ impl Postgres {
         for _ in 0..n {
             selects.push(
                 sqlx::query_as(
-                    "SELECT id, radomNumber FROM World WHERE id = $1")
+                    "SELECT id, randomNumber FROM World WHERE id = $1")
                     .bind((rng.gen::<u32>() % 10_000 + 1) as i32)
                     .fetch_one(&self.0)
             )
