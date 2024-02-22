@@ -32,7 +32,7 @@ PostgreSQL with [sqlx](https://github.com/launchbadge/sqlx)
 
     http://localhost:8000/fortunes
 
-### 5: Database Updates
+### 5. Database Updates
 
     http://localhost:8000/updates?q={count}
 
