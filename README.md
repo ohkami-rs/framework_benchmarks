@@ -12,9 +12,7 @@
 
 ## Database
 
-PostgreSQL
-
--  Raw using [sqlx](https://github.com/launchbadge/sqlx)
+PostgreSQL with [sqlx](https://github.com/launchbadge/sqlx)
 
 ## Test URLs
 
@@ -28,7 +26,7 @@ PostgreSQL
 
 ### Test 3: Multi Row Query
 
-    http://localhost:8000/queries?q=20
+    http://localhost:8000/queries?q={count}
 
 ### Test 4: Fortunes (Template rendering)
 
@@ -36,7 +34,7 @@ PostgreSQL
 
 ### Test 5: Update Query
 
-    http://localhost:8000/updates?q=20
+    http://localhost:8000/updates?q={count}
 
 ### Test 6: Plaintext
 
