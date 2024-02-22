@@ -15,8 +15,6 @@ async fn main() {
     struct SetServer;
     impl ohkami::BackFang for SetServer {
         type Error = std::convert::Infallible;
-
-        #[inline(always)]
         async fn bite(&self, res: &mut ohkami::Response, _req: &ohkami::Request) -> Result<(), Self::Error> {
             res.headers.set().Server("ohkami");
             Ok(())
@@ -33,25 +31,21 @@ async fn main() {
     )).howl("0.0.0.0:8000").await
 }
 
-#[inline(always)]
 async fn json_serialization() -> Message {
     Message {
         message: "Hello, World!"
     }
 }
 
-#[inline(always)]
 async fn single_database_query(p: Memory<'_, Postgres>) -> World {
     p.select_random_world().await
 }
 
-#[inline(always)]
 async fn multiple_database_query(q: WorldsQuery<'_>, p: Memory<'_, Postgres>) -> Vec<World> {
     let n = q.parse();
     p.select_n_random_worlds(n).await
 }
 
-#[inline(always)]
 async fn fortunes(p: Memory<'_, Postgres>) -> FortunesTemplate {
     let mut fortunes = p.select_all_fortunes().await;
     fortunes.push(Fortune {
@@ -63,13 +57,11 @@ async fn fortunes(p: Memory<'_, Postgres>) -> FortunesTemplate {
     FortunesTemplate { fortunes }
 }
 
-#[inline(always)]
 async fn database_updates(q: WorldsQuery<'_>, p: Memory<'_, Postgres>) -> Vec<World> {
     let worlds = p.select_n_random_worlds(q.parse()).await;
     p.update_random_ids_of_worlds(worlds).await
 }
 
-#[inline(always)]
 async fn plaintext() -> &'static str {
     "Hello, World"
 }
