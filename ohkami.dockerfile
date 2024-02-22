@@ -1,5 +1,5 @@
 FROM rust:1.76-slim-buster
-WORKDIR /ohkami
+WORKDIR /ohkami_framework_benchmarks
 
 ENV DATABASE_URL=postgres://benchmarkdbuser:benchmarkdbpass@tfb-database/hello_world
 ENV MAX_CONNECTIONS=56
@@ -16,4 +16,4 @@ RUN apt update && apt install -y --no-install-recommends \
 
 RUN RUSTFLAGS="-C target-cpu=native" cargo build --release
 EXPOSE 8000
-CMD ./target/release/ohkami
+CMD ./target/release/ohkami_framework_benchmarks
