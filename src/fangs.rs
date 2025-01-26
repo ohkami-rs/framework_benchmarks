@@ -1,7 +1,6 @@
 use ohkami::prelude::*;
 use crate::Postgres;
 
-
 #[derive(Clone)]
 pub struct SetServer;
 impl FangAction for SetServer {
