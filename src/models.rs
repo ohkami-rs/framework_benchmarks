@@ -1,8 +1,6 @@
-use ohkami::typed::{Payload, Query};
-use ohkami::builtin::payload::JSON;
+use ohkami::serde::{Serialize, Deserialize};
 
-
-#[Payload(JSON/S)]
+#[derive(Serialize)]
 pub struct Message {
     pub message: &'static str,
 }
@@ -14,18 +12,19 @@ pub struct Fortune {
 }
 
 #[derive(sqlx::FromRow)]
-#[Payload(JSON/S)]
+#[derive(Serialize)]
+#[allow(non_snake_case)]
 pub struct World {
     pub id:           i32,
-    #[serde(rename="randomNumber")]
+    #[serde(rename = "randomNumber")]
     pub randomnumber: i32,
 }
 
-#[Query]
-pub struct WorldsQuery<'q> {
-    q: Option<&'q str>,
+#[derive(Deserialize)]
+pub struct WorldsMeta<'req> {
+    q: Option<&'req str>,
 }
-impl WorldsQuery<'_> {
+impl WorldsMeta<'_> {
     #[inline(always)]
     pub fn parse(self) -> usize {
         match self.q.unwrap_or("1").parse::<usize>().unwrap_or(1) {
